@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MessOS — Control Center v3</title>
+<style>
+:root{--bg:#090a0d;--panel:#111318;--panel2:#171920;--gold:#d6ae58;--gold2:#f2d487;--text:#f5f1e8;--muted:#9da1aa;--green:#62d39b;--red:#ff7373;--blue:#6fa8ff;--line:#282b34;--shadow:0 16px 40px rgba(0,0,0,.38)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#292113 0,transparent 32%),radial-gradient(circle at 100% 20%,#171b29 0,transparent 28%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1180px;margin:auto;padding:18px 16px 90px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#f0cf7b,#9b6e22);box-shadow:inset 0 1px 0 #fff7,0 10px 30px #0008;display:grid;place-items:center;color:#17120a;font-weight:900;font-size:20px}.title{font-size:21px;font-weight:850}.sub{font-size:12px;color:var(--muted)}.pill{padding:8px 11px;border:1px solid #4d432c;border-radius:999px;background:#17140d;color:var(--gold2);font-size:12px}
+.hero{background:linear-gradient(145deg,#17181e,#0e1015);border:1px solid #2c2d33;border-radius:25px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-60px;top:-70px;background:#d6ae5817;filter:blur(4px)}.hero h1{margin:0 0 6px;font-size:28px}.hero p{margin:0;color:var(--muted);line-height:1.5}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}.card{background:linear-gradient(145deg,#15171d,#101116);border:1px solid var(--line);border-radius:19px;padding:15px;box-shadow:0 10px 25px #0004}.k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.v{font-size:24px;font-weight:850;margin-top:5px}.ok{color:var(--green)}.bad{color:var(--red)}.gold{color:var(--gold2)}.blue{color:var(--blue)}
+.nav{display:flex;gap:8px;overflow:auto;margin:16px 0}.nav button,.btn{border:1px solid var(--line);background:#14161c;color:#d9d9dc;border-radius:13px;padding:10px 13px;white-space:nowrap}.nav button.active,.btn.primary{background:linear-gradient(145deg,#e2bd68,#a87929);color:#17120a;border-color:#e6c977;font-weight:800}.section{display:none}.section.active{display:block}.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.form{background:#111318;border:1px solid var(--line);padding:16px;border-radius:19px;margin-bottom:14px}.form h3{margin:0 0 13px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;background:#0b0d11;color:#f5f1e8;border:1px solid #30333c;border-radius:11px;padding:11px;outline:none}input:focus,select:focus,textarea:focus{border-color:#a9833c}.actions{display:flex;gap:8px;flex-wrap:wrap}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px}.table{width:100%;border-collapse:collapse;min-width:700px}.table th,.table td{padding:10px;border-bottom:1px solid #262932;text-align:left;font-size:12px}.table th{color:var(--muted);font-weight:600;background:#101217}.mini{font-size:11px;color:var(--muted)}.tag{display:inline-block;padding:5px 8px;border-radius:999px;font-size:10px;border:1px solid #3b3e48}.tag.ok{border-color:#285b45}.tag.bad{border-color:#683535}.tag.blue{border-color:#2e4e78}.search{margin-bottom:12px}.modal{position:fixed;inset:0;background:#000b;display:none;align-items:flex-end;justify-content:center;z-index:10}.modal.show{display:flex}.sheet{width:min(760px,100%);max-height:92vh;overflow:auto;background:#111318;border:1px solid #343741;border-radius:24px 24px 0 0;padding:18px;box-shadow:0 -20px 60px #0008}.sheethead{display:flex;justify-content:space-between;align-items:center}.close{background:#22252d;border:0;color:#fff;border-radius:10px;padding:8px 12px}.statement{background:#fff;color:#161616;padding:20px;border-radius:14px}.statement h2{margin-top:0}.statement table{width:100%;border-collapse:collapse}.statement td,.statement th{border-bottom:1px solid #ddd;padding:8px;text-align:left;font-size:12px}.bottom{position:fixed;bottom:0;left:0;right:0;background:#0d0f13ee;backdrop-filter:blur(14px);border-top:1px solid #292c34;display:flex;justify-content:center;z-index:9}.bottomin{max-width:900px;width:100%;display:flex;justify-content:space-around}.bottom button{background:none;border:0;color:#9296a0;padding:11px 8px;font-size:11px}.bottom button.active{color:var(--gold2)}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.row,.row3{grid-template-columns:1fr}.hero h1{font-size:23px}}@media(min-width:801px){.bottom{display:none}}
+</style>
+
+<style id="messos-v6-ui">
+:root{--bg:#090a0f;--panel:#11131b;--panel2:#171a24;--gold:#e7b75b;--text:#f5f6f8;--muted:#9da3b2;--line:rgba(255,255,255,.08)}
+body{background:radial-gradient(circle at top,#171522 0,#090a0f 45%,#07080c 100%);color:var(--text)}
+.section{display:none;padding:18px 14px 105px;max-width:1100px;margin:auto}
+.section.active{display:block}
+.sectionHead{margin:8px 0 18px}
+.sectionHead h2{font-size:25px;margin:4px 0 5px}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:800}
+.muted{color:var(--muted)}
+.card{background:linear-gradient(145deg,rgba(24,27,38,.98),rgba(13,15,22,.98));border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 12px 30px rgba(0,0,0,.22)}
+.card h3{margin:0 0 12px;font-size:17px}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.formGrid{gap:12px}
+input,select{background:#0c0e15!important;color:#fff!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:13px!important;min-height:46px;padding:10px 12px!important}
+button{border-radius:14px!important}
+.primary{background:linear-gradient(135deg,#f0c86b,#b8862d)!important;color:#17120a!important;font-weight:800;min-height:46px;padding:0 17px}
+.ghost{background:#171a24!important;color:#e9ebf0!important;border:1px solid var(--line)!important}
+.statsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.statCard{background:#11131b;border:1px solid var(--line);border-radius:18px;padding:13px}
+.statCard strong{display:block;font-size:21px;margin-top:4px}
+.tableWrap{overflow:auto;border-radius:14px}
+table{min-width:650px;width:100%}
+th{color:#aeb4c2;font-size:11px;text-transform:uppercase;letter-spacing:.7px}
+td,th{padding:11px 10px;border-bottom:1px solid var(--line)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+/* Main dashboard becomes a simple launcher */
+#home .dashboardGrid,.dashboardGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.homeTile{min-height:118px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#171a24,#0f1118);padding:18px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 28px rgba(0,0,0,.2)}
+.homeTile .bigIcon{font-size:36px}.homeTile b{font-size:17px}.homeTile span{font-size:12px;color:var(--muted)}
+/* Bottom navigation: large, thumb-friendly */
+.bottomNav{position:fixed!important;left:10px!important;right:10px!important;bottom:10px!important;height:76px!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:24px!important;background:rgba(14,16,23,.94)!important;backdrop-filter:blur(18px);z-index:1000!important;display:flex!important;align-items:center!important;justify-content:space-around!important;box-shadow:0 15px 40px rgba(0,0,0,.5)}
+.bottomNav button{height:62px!important;min-width:62px!important;padding:5px 9px!important;background:transparent!important;border:0!important;color:#9298a8!important;font-size:11px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important}
+.bottomNav button:first-letter{font-size:25px}
+.bottomNav button.active{color:var(--gold)!important;background:rgba(231,183,91,.09)!important}
+@media(min-width:760px){.section{padding-left:24px;padding-right:24px}.grid2{display:grid}.bottomNav{display:none!important}#home .dashboardGrid,.dashboardGrid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:759px){.grid2{display:block}.statsGrid{grid-template-columns:repeat(2,1fr)}.sectionHead h2{font-size:23px}.card{padding:14px}.homeTile{min-height:105px}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="top"><div class="brand"><div class="logo">M</div><div><div class="title">MessOS Control Center</div><div class="sub">Student • Cash • Stock • Partner • Audit</div></div></div><div class="pill" id="syncPill">● Local Secure</div></div>
+
+<div class="hero">
+<h1>₹1 ka bhi hisaab clear.</h1><p>Payment ko bill-wise allocate karo, old due pehle settle karo, extra amount ko advance rakho — aur closing par expected vs actual match karo.</p>
+</div>
+
+<div class="grid">
+<div class="card"><div class="k">This Month Billing</div><div class="v gold" id="mBilling">₹0</div></div>
+<div class="card"><div class="k">Collected</div><div class="v ok" id="mCollected">₹0</div></div>
+<div class="card"><div class="k">Student Due</div><div class="v bad" id="mDue">₹0</div></div>
+<div class="card"><div class="k">Advance</div><div class="v blue" id="mAdvance">₹0</div></div>
+</div>
+
+<div class="nav" id="nav"></div>
+
+<section class="section active" id="home">
+<div class="row3">
+<div class="card"><div class="k">No Payment This Month</div><div class="v" id="noPay">0</div></div>
+<div class="card"><div class="k">Partial Bills</div><div class="v" id="partial">0</div></div>
+<div class="card"><div class="k">Supplier Due</div><div class="v bad" id="supplierDue">₹0</div></div>
+</div>
+<div class="form"><h3>Quick Actions</h3><div class="actions"><button class="btn primary" onclick="go('students')">+ Student</button><button class="btn" onclick="go('billing')">Receive Payment</button><button class="btn" onclick="go('purchase')">+ Purchase</button><button class="btn" onclick="go('cash')">Daily Closing</button></div></div>
+<div class="form"><h3>Control Alerts</h3><div id="alerts"></div></div>
+</section>
+
+<section class="section" id="students">
+<div class="form"><h3>Add / Edit Student</h3><div class="row">
+<div class="field"><label>Name *</label><input id="sName"></div><div class="field"><label>Mobile (optional)</label><input id="sMobile"></div>
+<div class="field"><label>Batch (optional)</label><input id="sBatch"></div><div class="field"><label>Join Date</label><input id="sJoin" type="date"></div>
+<div class="field"><label>Plan</label><select id="sPlan"><option value="monthly">Monthly</option><option value="daily">Daily</option></select></div><div class="field"><label>Monthly Rate</label><input id="sRate" type="number" value="4000"></div>
+</div><div class="field"><label>Meals</label><div class="actions" id="mealChecks"></div></div><div class="actions"><button class="btn primary" onclick="saveStudent()">Save Student</button><button class="btn" onclick="clearStudent()">Clear</button></div></div>
+<input class="search" id="studentSearch" placeholder="Search student / mobile / batch..." oninput="renderStudents()">
+<div class="tablewrap"><table class="table"><thead><tr><th>Student</th><th>Batch</th><th>Plan</th><th>Bill</th><th>Paid</th><th>Due</th><th>Advance</th><th>Action</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+</section>
+
+<section class="section" id="billing">
+<div class="form"><h3>Generate Monthly Bills</h3><div class="row"><div class="field"><label>Month</label><input id="billMonth" type="month"></div><div class="field"><label>Due Date</label><input id="billDueDate" type="date"></div></div><div class="actions"><button class="btn primary" onclick="generateBills()">Generate / Update Bills</button></div></div>
+<div class="form"><h3>Receive Payment</h3><div class="row">
+<div class="field"><label>Student</label><select id="payStudent" onchange="previewPayment()"></select></div><div class="field"><label>Date</label><input id="payDate" type="date"></div>
+<div class="field"><label>Amount *</label><input id="payAmount" type="number" oninput="previewPayment()"></div><div class="field"><label>Mode</label><select id="payMode"><option>Cash</option><option>UPI</option><option>Bank</option></select></div>
+<div class="field"><label>UTR / Reference</label><input id="payRef"></div><div class="field"><label>Note</label><input id="payNote"></div>
+</div><div class="card" id="payPreview">Select student and amount.</div><div class="actions" style="margin-top:10px"><button class="btn primary" onclick="receivePayment()">Save Payment + Receipt</button></div></div>
+<div class="form"><h3>Billing Ledger</h3><input class="search" id="billSearch" placeholder="Search student..." oninput="renderBilling()"><div class="tablewrap"><table class="table"><thead><tr><th>Month</th><th>Student</th><th>Bill</th><th>Allocated</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="billRows"></tbody></table></div></div>
+</section>
+
+<section class="section" id="shared">
+<div class="hero" style="margin-bottom:14px">
+  <h1>Shared Kitchen Control</h1>
+  <p>Tum sirf simple numbers dalo. Website common kharcha, dono mess ka share, partner settlement aur ₹1 tak ka difference khud calculate karegi.</p>
+</div>
+
+<div class="form">
+<h3>1. Aaj kitne tiffin / meal units?</h3>
+<div class="row3">
+  <div class="field"><label>Date</label><input id="shDate" type="date"></div>
+  <div class="field"><label>Partner ka Old Mess</label><input id="shOldCount" type="number" min="0" value="0"></div>
+  <div class="field"><label>Tumhara New Mess</label><input id="shNewCount" type="number" min="0" value="0"></div>
+</div>
+<div class="card" id="shRatio">Total: 0 • Old: 0% • New: 0%</div>
+</div>
+
+<div class="form">
+<h3>2. Common saman / kharcha</h3>
+<p class="mini">Har item alag add karo. “Dono” select karne par system default me tiffin ratio se divide karega. Agar kisi item ka actual share alag ho, us item me custom rule choose kar sakte ho.</p>
+<div class="row3">
+  <div class="field"><label>Item *</label><input id="shItem" placeholder="Oil, Dal, Gas..."></div>
+  <div class="field"><label>Total Amount *</label><input id="shAmount" type="number" min="0" step="0.01"></div>
+  <div class="field"><label>Kiske liye?</label><select id="shOwner"><option value="common">Dono — Automatic</option><option value="old">Sirf Old Mess</option><option value="new">Sirf New Mess</option></select></div>
+  <div class="field"><label>Divide Rule</label><select id="shRule"><option value="tiffin">Tiffin Ratio (Recommended)</option><option value="meal">Meal Ratio</option><option value="50">50 / 50</option><option value="custom">Custom</option></select></div>
+  <div class="field"><label>Old Mess Custom %</label><input id="shCustom" type="number" min="0" max="100" step="0.01" value="50"></div>
+  <div class="field"><label>Note</label><input id="shNote" placeholder="Optional"></div>
+</div>
+<div class="actions"><button class="btn primary" onclick="addSharedCost()">Add Common Cost</button><button class="btn" onclick="clearSharedCost()">Clear</button></div>
+</div>
+
+<div class="grid">
+<div class="card"><div class="k">Old Mess Share Today</div><div class="v gold" id="shOldToday">₹0</div></div>
+<div class="card"><div class="k">New Mess Share Today</div><div class="v ok" id="shNewToday">₹0</div></div>
+<div class="card"><div class="k">Common Cost Today</div><div class="v" id="shTotalToday">₹0</div></div>
+<div class="card"><div class="k">Difference</div><div class="v ok" id="shDiffToday">₹0</div></div>
+</div>
+
+<div class="form">
+<h3>Today's Detailed Split</h3>
+<div class="tablewrap"><table class="table"><thead><tr><th>Item</th><th>Total</th><th>Rule</th><th>Old Mess</th><th>New Mess</th><th>Check</th></tr></thead><tbody id="shRows"></tbody></table></div>
+</div>
+
+<div class="form">
+<h3>3. Partner Settlement</h3>
+<p class="mini">Yahan app recorded shared costs aur direct payments ko dekhkar net settlement nikalegi. Positive amount = New Mess ko Old Mess ko dena hai. Negative = Old Mess ko New Mess ko dena hai.</p>
+<div class="row3">
+  <div class="card"><div class="k">Old Mess → New Mess Cost</div><div class="v" id="settOld">₹0</div></div>
+  <div class="card"><div class="k">New Mess → Old Mess Cost</div><div class="v" id="settNew">₹0</div></div>
+  <div class="card"><div class="k">Net Settlement</div><div class="v gold" id="settNet">₹0</div></div>
+</div>
+<div class="actions" style="margin-top:12px"><button class="btn primary" onclick="settlementBreakdown()">1-Second Full Breakdown</button><button class="btn" onclick="lockSharedMonth()">Lock This Month</button></div>
+</div>
+
+<div class="form">
+<h3>Shared Kitchen Audit</h3>
+<div id="shAuditSummary"></div>
+</div>
+</section>
+
+<section class="section" id="purchase">
+<div class="row">
+<div class="form"><h3>Purchase</h3><div class="field"><label>Item</label><input id="pItem"></div><div class="row"><div class="field"><label>Qty</label><input id="pQty" type="number"></div><div class="field"><label>Unit</label><input id="pUnit" placeholder="kg / litre / pcs"></div></div><div class="field"><label>Total Bill</label><input id="pTotal" type="number"></div><div class="field"><label>Paid Now</label><input id="pPaid" type="number" value="0"></div><div class="field"><label>Supplier</label><input id="pSupplier"></div><div class="field"><label>Mode</label><select id="pMode"><option>Cash</option><option>UPI</option><option>Bank</option><option>Credit</option></select></div><button class="btn primary" onclick="addPurchase()">Save Purchase</button></div>
+<div class="form"><h3>Expense</h3><div class="field"><label>Category</label><select id="eCat"><option>Rent</option><option>Electricity</option><option>Gas</option><option>Labour</option><option>Maintenance</option><option>Water</option><option>Other</option></select></div><div class="field"><label>Description</label><input id="eDesc"></div><div class="field"><label>Amount</label><input id="eAmt" type="number"></div><div class="field"><label>Mode</label><select id="eMode"><option>Cash</option><option>UPI</option><option>Bank</option></select></div><button class="btn primary" onclick="addExpense()">Save Expense</button></div>
+</div>
+<div class="form"><h3>Supplier Ledger</h3><div class="tablewrap"><table class="table"><thead><tr><th>Supplier</th><th>Purchase</th><th>Paid</th><th>Due</th></tr></thead><tbody id="supplierRows"></tbody></table></div></div>
+</section>
+
+<section class="section" id="cash">
+<div class="form"><h3>Daily Closing</h3><div class="row3"><div class="field"><label>Date</label><input id="cDate" type="date"></div><div class="field"><label>Opening Cash</label><input id="cOpen" type="number"></div><div class="field"><label>Actual Cash</label><input id="cActual" type="number"></div><div class="field"><label>Notes</label><input id="cNote"></div></div><div class="card" id="cashExpected">Expected cash will appear here.</div><button class="btn primary" style="margin-top:10px" onclick="saveClosing()">Save Closing</button></div>
+<div class="form"><h3>Cash / UPI / Bank Summary</h3><div class="grid"><div class="card"><div class="k">Cash Collection</div><div class="v" id="cashIn">₹0</div></div><div class="card"><div class="k">UPI Collection</div><div class="v" id="upiIn">₹0</div></div><div class="card"><div class="k">Bank Collection</div><div class="v" id="bankIn">₹0</div></div><div class="card"><div class="k">Cash Expenses</div><div class="v bad" id="cashOut">₹0</div></div></div></div>
+</section>
+
+<section class="section" id="reports">
+<div class="form"><h3>Student Statements</h3><div class="row"><div class="field"><label>Student</label><select id="stmtStudent" onchange="renderStatementPreview()"></select></div><div class="field"><label>Month</label><input id="stmtMonth" type="month" onchange="renderStatementPreview()"></div></div><div id="statementPreview"></div></div>
+<div class="form"><h3>Audit Log</h3><div class="tablewrap"><table class="table"><thead><tr><th>Time</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead><tbody id="auditRows"></tbody></table></div></div>
+</section>
+
+<section class="section" id="settings">
+<div class="form"><h3>Backup / Restore</h3><div class="actions"><button class="btn primary" onclick="backup()">Export JSON Backup</button><label class="btn">Import JSON<input type="file" accept="application/json" onchange="restore(event)" hidden></label><button class="btn" onclick="resetDemo()">Reset Demo Data</button></div><p class="mini">Abhi data isi device/browser me save hota hai. Real multi-device live sync ke liye Firebase/Supabase connection alag se add karna hoga.</p></div>
+</section>
+</div>
+
+<div class="bottom"><div class="bottomin"><button onclick="go('home')" data-n="home">⌂<br>Home</button><button onclick="go('students')" data-n="students">♙<br>Students</button><button onclick="go('billing')" data-n="billing">₹<br>Billing</button><button onclick="go('shared')" data-n="shared">⚖<br>Shared</button><button onclick="go('purchase')" data-n="purchase">▣<br>Purchase</button><button onclick="go('cash')" data-n="cash">◈<br>Cash</button><button onclick="go('reports')" data-n="reports">☷<br>Reports</button></div></div>
+
+<div class="modal" id="modal"><div class="sheet"><div class="sheethead"><h3 id="modalTitle">Student Ledger</h3><button class="close" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
+
+<script>
+const KEY='messos_control_v3';
+const meals=['Breakfast','Lunch','Dinner','Snacks'];
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ settings:{name:'MessOS'},students:[],bills:[],payments:[],purchases:[],expenses:[],closings:[],audit:[]
+};
+db.sharedCosts=db.sharedCosts||[];db.sharedLocks=db.sharedLocks||{};db.partnerDirect=db.partnerDirect||[];
+const $=id=>document.getElementById(id);
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:0});
+const today=new Date().toISOString().slice(0,10);
+$('payDate').value=today;$('cDate').value=today;$('sJoin').value=today;
+$('billMonth').value=today.slice(0,7);$('stmtMonth').value=today.slice(0,7);if($('shDate'))$('shDate').value=today;
+$('billDueDate').value=today;
+
+function save(){localStorage.setItem(KEY,JSON.stringify(db));}
+function audit(action,entity,details){db.audit.unshift({id:crypto.randomUUID(),time:new Date().toLocaleString('en-IN'),action,entity,details});db.audit=db.audit.slice(0,300);save();}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function go(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button,.bottom button').forEach(x=>x.classList.toggle('active',x.dataset.n===id));renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+const navs=[['home','Home'],['students','Students'],['billing','Billing'],['shared','Shared Kitchen'],['purchase','Purchase'],['cash','Cash'],['reports','Reports'],['settings','Settings']];
+$('nav').innerHTML=navs.map(x=>`<button data-n="${x[0]}" onclick="go('${x[0]}')">${x[1]}</button>`).join('');
+
+function activeStudents(){return db.students.filter(s=>s.active!==false)}
+function billsFor(id){return db.bills.filter(b=>b.studentId===id&&!b.voided)}
+function allocationsForBill(billId){return db.payments.filter(p=>!p.voided).reduce((a,p)=>(p.allocations||[]).forEach(x=>{if(x.billId===billId)a+=Number(x.amount||0)}),0)}
+function balance(id){
+ let bills=billsFor(id), total=bills.reduce((a,b)=>a+Number(b.finalAmount||b.amount||0),0);
+ let paid=db.payments.filter(p=>p.studentId===id&&!p.voided).reduce((a,p)=>a+Number(p.amount||0),0);
+ let allocated=bills.reduce((a,b)=>a+allocationsForBill(b.id),0);
+ return {total,paid,allocated,due:Math.max(0,total-allocated),advance:Math.max(0,paid-allocated)};
+}
+function billStatus(b){
+ let a=allocationsForBill(b.id), due=Number(b.finalAmount||b.amount||0)-a;
+ if(due<=0)return 'Paid';
+ if(a>0)return 'Partial';
+ return 'Due';
+}
+function autoAllocate(studentId,amount){
+ let left=Number(amount||0), allocations=[];
+ const bills=billsFor(studentId).filter(b=>(Number(b.finalAmount||b.amount||0)-allocationsForBill(b.id))>0)
+   .sort((a,b)=>String(a.month).localeCompare(String(b.month)));
+ for(const b of bills){
+   if(left<=0)break;
+   const due=Number(b.finalAmount||b.amount||0)-allocationsForBill(b.id);
+   const x=Math.min(left,due);allocations.push({billId:b.id,amount:x});left-=x;
+ }
+ return {allocations,advance:left};
+}
+function renderMealChecks(){ $('mealChecks').innerHTML=meals.map(m=>`<label class="tag"><input type="checkbox" value="${m}" style="width:auto" checked> ${m}</label>`).join('') }
+renderMealChecks();
+
+function saveStudent(){
+ const name=$('sName').value.trim();if(!name)return alert('Student name required');
+ const s={id:crypto.randomUUID(),name,mobile:$('sMobile').value.trim(),batch:$('sBatch').value.trim(),join:$('sJoin').value,plan:$('sPlan').value,rate:Number($('sRate').value||0),active:true,meals:[...$('mealChecks').querySelectorAll('input:checked')].map(x=>x.value)};
+ db.students.push(s);audit('CREATE','Student',name);clearStudent();renderAll();alert('Student saved');
+}
+function clearStudent(){['sName','sMobile','sBatch'].forEach(id=>$(id).value='');$('sJoin').value=today;$('sPlan').value='monthly';$('sRate').value=4000;renderMealChecks()}
+function renderStudents(){
+ const q=$('studentSearch').value.toLowerCase();let arr=activeStudents().filter(s=>(s.name+' '+s.mobile+' '+s.batch).toLowerCase().includes(q));
+ $('studentRows').innerHTML=arr.map(s=>{let b=balance(s.id);return `<tr><td><b>${esc(s.name)}</b><div class="mini">${esc(s.mobile)}</div></td><td>${esc(s.batch)}</td><td>${s.plan}</td><td>${money(b.total)}</td><td>${money(b.paid)}</td><td class="bad">${money(b.due)}</td><td class="blue">${money(b.advance)}</td><td><button class="btn" onclick="ledger('${s.id}')">Ledger</button></td></tr>`}).join('')||`<tr><td colspan="8">No students</td></tr>`;
+}
+function fillStudentSelects(){
+ const opts=activeStudents().map(s=>`<option value="${s.id}">${esc(s.name)}${s.batch?' • '+esc(s.batch):''}</option>`).join('');
+ ['payStudent','stmtStudent'].forEach(id=>$(id).innerHTML='<option value="">Select student</option>'+opts);
+}
+function generateBills(){
+ const month=$('billMonth').value;if(!month)return;
+ let created=0;
+ activeStudents().forEach(s=>{
+   let amount=Number(s.rate||0);
+   const existing=db.bills.find(b=>b.studentId===s.id&&b.month===month&&!b.voided);
+   if(existing){existing.finalAmount=amount;existing.dueDate=$('billDueDate').value;return}
+   db.bills.push({id:crypto.randomUUID(),studentId:s.id,month,issueDate:today,dueDate:$('billDueDate').value,amount,discount:0,fine:0,adjustment:0,finalAmount:amount,status:'Due',voided:false,locked:false});
+   created++;
+ });audit('CREATE','Bills',`${month}: ${created} new bills`);save();renderAll();alert(`${created} new bills created/updated.`);
+}
+function previewPayment(){
+ const id=$('payStudent').value, amt=Number($('payAmount').value||0);
+ if(!id||amt<=0){$('payPreview').innerHTML='Select student and amount.';return}
+ const b=balance(id), al=autoAllocate(id,amt), names=al.allocations.map(x=>{let bill=db.bills.find(b=>b.id===x.billId);return `<div>${bill.month}: <b>${money(x.amount)}</b></div>`}).join('');
+ $('payPreview').innerHTML=`<b>Current position:</b> Due ${money(b.due)} • Advance ${money(b.advance)}<hr><b>This payment will go:</b>${names||'<div>No old due — full amount becomes advance.</div>'}<div style="margin-top:7px;color:#6fa8ff">New advance: ${money(al.advance)}</div>`;
+}
+function receivePayment(){
+ const studentId=$('payStudent').value, amount=Number($('payAmount').value||0);
+ if(!studentId||amount<=0)return alert('Student and amount required');
+ const al=autoAllocate(studentId,amount), p={id:crypto.randomUUID(),receipt:'RCP-'+Date.now().toString().slice(-8),studentId,date:$('payDate').value,amount,mode:$('payMode').value,ref:$('payRef').value.trim(),note:$('payNote').value.trim(),allocations:al.allocations,advanceAfter:al.advance,voided:false};
+ db.payments.push(p);audit('CREATE','Payment',`${p.receipt} ${money(amount)}`);save();renderAll();showReceipt(p.id);$('payAmount').value='';$('payRef').value='';$('payNote').value='';
+}
+function showReceipt(pid){
+ const p=db.payments.find(x=>x.id===pid),s=db.students.find(x=>x.id===p.studentId), al=p.allocations.map(x=>{let b=db.bills.find(y=>y.id===x.billId);return `<tr><td>${b.month}</td><td>${money(x.amount)}</td></tr>`}).join('');
+ $('modalTitle').textContent='Payment Receipt '+p.receipt;
+ $('modalBody').innerHTML=`<div class="statement"><h2>MessOS Receipt</h2><p><b>Receipt:</b> ${p.receipt}<br><b>Student:</b> ${esc(s.name)}<br><b>Date:</b> ${p.date}<br><b>Mode:</b> ${p.mode}${p.ref?' • '+esc(p.ref):''}</p><table><tr><th>Bill</th><th>Allocated</th></tr>${al||'<tr><td>Advance</td><td>'+money(p.amount)+'</td></tr>'}</table><h3>Total Paid: ${money(p.amount)}</h3>${p.advanceAfter?'<p>Advance remaining: <b>'+money(p.advanceAfter)+'</b></p>':''}</div>`;
+ $('modal').classList.add('show');
+}
+function ledger(id){
+ const s=db.students.find(x=>x.id===id), bs=billsFor(id).sort((a,b)=>a.month.localeCompare(b.month)), ps=db.payments.filter(p=>p.studentId===id&&!p.voided).sort((a,b)=>a.date.localeCompare(b.date));
+ let tx=[];
+ bs.forEach(b=>tx.push({date:b.issueDate,part:`Bill ${b.month}`,bill:b.month,amount:Number(b.finalAmount||b.amount),paid:allocationsForBill(b.id),mode:''}));
+ ps.forEach(p=>tx.push({date:p.date,part:`Payment ${p.receipt}`,bill:(p.allocations||[]).map(x=>db.bills.find(b=>b.id===x.billId)?.month).filter(Boolean).join(', ')||'Advance',amount:0,paid:p.amount,mode:p.mode}));
+ tx.sort((a,b)=>a.date.localeCompare(b.date)||a.part.localeCompare(b.part));let bal=0;
+ $('modalTitle').textContent=`Ledger — ${s.name}`;
+ $('modalBody').innerHTML=`<div class="grid"><div class="card"><div class="k">Billed</div><div class="v">${money(balance(id).total)}</div></div><div class="card"><div class="k">Paid</div><div class="v ok">${money(balance(id).paid)}</div></div><div class="card"><div class="k">Due</div><div class="v bad">${money(balance(id).due)}</div></div><div class="card"><div class="k">Advance</div><div class="v blue">${money(balance(id).advance)}</div></div></div><div class="tablewrap" style="margin-top:14px"><table class="table"><thead><tr><th>Date</th><th>Particular</th><th>Bill</th><th>Debit</th><th>Credit</th><th>Mode</th><th>Balance</th></tr></thead><tbody>${tx.map(t=>{bal+=t.amount-t.paid;return `<tr><td>${t.date}</td><td>${esc(t.part)}</td><td>${t.bill}</td><td>${t.amount?money(t.amount):'-'}</td><td>${t.paid?money(t.paid):'-'}</td><td>${t.mode}</td><td>${money(Math.max(0,bal))}</td></tr>`}).join('')}</tbody></table></div>`;
+ $('modal').classList.add('show');
+}
+function renderBilling(){
+ const q=$('billSearch').value.toLowerCase();
+ $('billRows').innerHTML=db.bills.filter(b=>!b.voided).filter(b=>{let s=db.students.find(x=>x.id===b.studentId);return (s?.name||'').toLowerCase().includes(q)}).sort((a,b)=>b.month.localeCompare(a.month)).map(b=>{
+   let s=db.students.find(x=>x.id===b.studentId),a=allocationsForBill(b.id),due=Number(b.finalAmount)-a,st=billStatus(b);
+   return `<tr><td>${b.month}</td><td>${esc(s?.name||'')}</td><td>${money(b.finalAmount)}</td><td>${money(a)}</td><td class="${due?'bad':'ok'}">${money(Math.max(0,due))}</td><td><span class="tag ${st==='Paid'?'ok':st==='Partial'?'blue':'bad'}">${st}</span></td><td><button class="btn" onclick="ledger('${b.studentId}')">Ledger</button></td></tr>`
+ }).join('')||'<tr><td colspan="7">No bills</td></tr>';
+}
+function addPurchase(){
+ const item=$('pItem').value.trim(), total=Number($('pTotal').value||0),paid=Number($('pPaid').value||0);if(!item||total<=0)return alert('Item and total required');
+ db.purchases.push({id:crypto.randomUUID(),date:today,item,qty:Number($('pQty').value||0),unit:$('pUnit').value,supplier:$('pSupplier').value.trim()||'General',total,paid,mode:$('pMode').value,voided:false});
+ audit('CREATE','Purchase',`${item} ${money(total)}`);save();renderAll();alert('Purchase saved');
+}
+function addExpense(){
+ const desc=$('eDesc').value.trim(),amt=Number($('eAmt').value||0);if(!desc||amt<=0)return alert('Description and amount required');
+ db.expenses.push({id:crypto.randomUUID(),date:today,category:$('eCat').value,desc,amount:amt,mode:$('eMode').value,voided:false});
+ audit('CREATE','Expense',`${desc} ${money(amt)}`);save();renderAll();alert('Expense saved');
+}
+function renderSuppliers(){
+ const map={};db.purchases.filter(x=>!x.voided).forEach(p=>{let k=p.supplier||'General';map[k]??={t:0,p:0};map[k].t+=p.total;map[k].p+=p.paid});
+ $('supplierRows').innerHTML=Object.entries(map).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v.t)}</td><td>${money(v.p)}</td><td class="bad">${money(Math.max(0,v.t-v.p))}</td></tr>`).join('')||'<tr><td colspan="4">No purchases</td></tr>';
+}
+function renderCash(){
+ let p=db.payments.filter(x=>!x.voided),e=db.expenses.filter(x=>!x.voided),cash=p.filter(x=>x.mode==='Cash').reduce((a,x)=>a+x.amount,0),upi=p.filter(x=>x.mode==='UPI').reduce((a,x)=>a+x.amount,0),bank=p.filter(x=>x.mode==='Bank').reduce((a,x)=>a+x.amount,0),co=e.filter(x=>x.mode==='Cash').reduce((a,x)=>a+x.amount,0);
+ $('cashIn').textContent=money(cash);$('upiIn').textContent=money(upi);$('bankIn').textContent=money(bank);$('cashOut').textContent=money(co);
+ const open=Number($('cOpen').value||0),expected=open+cash-co;$('cashExpected').innerHTML=`Expected cash (from all recorded transactions): <b>${money(expected)}</b>. For an exact day closing, enter opening cash and use the selected date's receipts/expenses.`;
+}
+$('cOpen').addEventListener('input',renderCash);
+function saveClosing(){const open=Number($('cOpen').value||0),actual=Number($('cActual').value||0),expected=open+db.payments.filter(p=>!p.voided&&p.date===$('cDate').value&&p.mode==='Cash').reduce((a,p)=>a+p.amount,0)-db.expenses.filter(e=>!e.voided&&e.date===$('cDate').value&&e.mode==='Cash').reduce((a,e)=>a+e.amount,0);const diff=actual-expected;db.closings.push({id:crypto.randomUUID(),date:$('cDate').value,opening:open,expected,actual,diff,note:$('cNote').value});audit('CLOSE','Cash',`${$('cDate').value} difference ${money(diff)}`);save();renderAll();alert(`Closing saved. Difference: ${money(diff)}`)}
+function renderStatementPreview(){
+ const id=$('stmtStudent').value,month=$('stmtMonth').value;if(!id)return $('statementPreview').innerHTML='';
+ const s=db.students.find(x=>x.id===id),bs=billsFor(id).filter(b=>b.month===month),ps=db.payments.filter(p=>p.studentId===id&&!p.voided&&p.date.startsWith(month));
+ $('statementPreview').innerHTML=`<div class="statement"><h2>${esc(s.name)} — ${month}</h2><p>Bill: <b>${money(bs.reduce((a,b)=>a+b.finalAmount,0))}</b> • Payments: <b>${money(ps.reduce((a,p)=>a+p.amount,0))}</b> • Current Due: <b>${money(balance(id).due)}</b></p><table><tr><th>Date</th><th>Particular</th><th>Amount</th><th>Mode</th></tr>${ps.map(p=>`<tr><td>${p.date}</td><td>Receipt ${p.receipt}</td><td>${money(p.amount)}</td><td>${p.mode}</td></tr>`).join('')||'<tr><td colspan="4">No payment this month</td></tr>'}</table></div>`;
+}
+function renderAudit(){$('auditRows').innerHTML=db.audit.slice(0,80).map(x=>`<tr><td>${esc(x.time)}</td><td>${esc(x.action)}</td><td>${esc(x.entity)}</td><td>${esc(x.details)}</td></tr>`).join('')}
+
+function assetId(){ return 'AST-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7); }
+function assetMoveId(){ return 'MOV-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7); }
+function assetMoney(n){ return '₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2}); }
+
+function addAsset(){
+  const name = (document.getElementById('assetName')?.value||'').trim();
+  if(!name){ alert('Item ka naam dalo'); return; }
+  const a = {
+    id:assetId(), name, category:document.getElementById('assetCategory').value,
+    messId:document.getElementById('assetMess').value,
+    opening:Number(document.getElementById('assetOpening').value||0),
+    price:Number(document.getElementById('assetPrice').value||0),
+    min:Number(document.getElementById('assetMin').value||0),
+    createdAt:new Date().toISOString(), voided:false
+  };
+  db.assets.push(a);
+  db.audit.push({id:'AUD-'+Date.now(),date:new Date().toISOString(),action:'Asset Added',detail:`${name} • Opening ${a.opening}`});
+  save(); renderAssets();
+  ['assetName','assetOpening','assetPrice','assetMin'].forEach(id=>{const e=document.getElementById(id); if(e)e.value=id==='assetOpening'||id==='assetPrice'||id==='assetMin'?'0':'';});
+}
+
+function assetSigned(m){
+  const q=Number(m.qty||0);
+  if(m.type==='purchase'||m.type==='transfer_in') return q;
+  if(m.type==='broken'||m.type==='missing'||m.type==='stolen'||m.type==='transfer_out') return -q;
+  return q;
+}
+function assetExpected(a){
+  return Number(a.opening||0) + db.assetMovements.filter(m=>m.assetId===a.id&&!m.voided).reduce((s,m)=>s+assetSigned(m),0);
+}
+function addAssetMovement(){
+  const assetIdV=document.getElementById('assetMoveItem').value;
+  const qty=Number(document.getElementById('assetMoveQty').value||0);
+  if(!assetIdV || qty<=0){ alert('Saman aur quantity dalo'); return; }
+  const a=db.assets.find(x=>x.id===assetIdV); if(!a)return;
+  const type=document.getElementById('assetMoveType').value;
+  const date=document.getElementById('assetMoveDate').value || new Date().toISOString().slice(0,10);
+  const m={id:assetMoveId(),assetId:assetIdV,type,qty,date,note:(document.getElementById('assetMoveNote').value||'').trim(),person:(document.getElementById('assetMovePerson').value||'').trim(),createdAt:new Date().toISOString(),voided:false};
+  db.assetMovements.push(m);
+  db.audit.push({id:'AUD-'+Date.now(),date:new Date().toISOString(),action:'Asset Movement',detail:`${a.name} • ${type} • ${qty} • ${m.note||'-'}`});
+  save(); renderAssets();
+  document.getElementById('assetMoveQty').value=1;
+  document.getElementById('assetMoveNote').value='';
+  document.getElementById('assetMovePerson').value='';
+}
+
+function voidAssetMovement(id){
+  const m=db.assetMovements.find(x=>x.id===id); if(!m)return;
+  const reason=prompt('Void/correction ka reason likho:');
+  if(!reason)return;
+  m.voided=true; m.voidReason=reason; m.voidedAt=new Date().toISOString();
+  db.audit.push({id:'AUD-'+Date.now(),date:new Date().toISOString(),action:'Asset Movement Voided',detail:`${m.id} • ${reason}`});
+  save(); renderAssets();
+}
+
+function renderAssetMoveOptions(){
+  const sel=document.getElementById('assetMoveItem'); if(!sel)return;
+  const list=db.assets.filter(a=>!a.voided);
+  sel.innerHTML=list.length?list.map(a=>`<option value="${a.id}">${a.name} — ${a.messId==='old'?'Old Mess':a.messId==='new'?'New Mess':'Common'}</option>`).join(''):'<option value="">Pehle saman add karein</option>';
+}
+function renderAssets(){
+  renderAssetMoveOptions();
+  const active=db.assets.filter(a=>!a.voided);
+  let expected=0, value=0, alerts=0, losses=0;
+  const rows=active.map(a=>{
+    const exp=assetExpected(a);
+    const loss=db.assetMovements.filter(m=>m.assetId===a.id&&!m.voided&&(m.type==='broken'||m.type==='missing'||m.type==='stolen')).reduce((s,m)=>s+Number(m.qty||0),0);
+    expected+=exp; value+=exp*Number(a.price||0); losses+=loss; if(exp<=Number(a.min||0))alerts++;
+    const mess=a.messId==='old'?'Old Mess':a.messId==='new'?'New Mess':'Common';
+    return `<tr><td><b>${a.name}</b><div class="muted">${a.category}</div></td><td>${mess}</td><td>${a.opening}</td><td>${db.assetMovements.filter(m=>m.assetId===a.id&&!m.voided&&(m.type==='purchase'||m.type==='transfer_in')).reduce((s,m)=>s+Number(m.qty||0),0)}</td><td>${loss}</td><td><b>${exp}</b></td><td>${assetMoney(exp*a.price)}</td></tr>`;
+  }).join('');
+  document.getElementById('assetStats').innerHTML=`
+    <div class="statCard"><div class="muted">Total Items</div><strong>${active.length}</strong></div>
+    <div class="statCard"><div class="muted">Expected Qty</div><strong>${expected}</strong></div>
+    <div class="statCard"><div class="muted">Loss / Missing</div><strong>${losses}</strong></div>
+    <div class="statCard"><div class="muted">Current Value</div><strong>${assetMoney(value)}</strong></div>
+  `;
+  document.getElementById('assetTable').innerHTML=active.length?`<div class="tableWrap"><table><thead><tr><th>Saman</th><th>Mess</th><th>Opening</th><th>In</th><th>Loss</th><th>Expected</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty">Abhi koi kitchen saman add nahi hai.</div>`;
+  const hist=[...db.assetMovements].filter(m=>!m.voided).sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.createdAt).localeCompare(String(a.createdAt))).slice(0,50);
+  document.getElementById('assetHistory').innerHTML=hist.length?`<div class="tableWrap"><table><thead><tr><th>Date</th><th>Item</th><th>Type</th><th>Qty</th><th>Note</th><th></th></tr></thead><tbody>${hist.map(m=>{const a=db.assets.find(x=>x.id===m.assetId);return `<tr><td>${m.date}</td><td>${a?a.name:'-'}</td><td>${m.type}</td><td>${m.qty}</td><td>${m.note||'-'}${m.person?`<div class="muted">Person: ${m.person}</div>`:''}</td><td><button class="ghost" onclick="voidAssetMovement('${m.id}')">Void</button></td></tr>`}).join('')}</tbody></table></div>`:`<div class="empty">Koi movement nahi.</div>`;
+}
+
+function renderHome(){
+ const month=$('billMonth').value,total=db.bills.filter(b=>!b.voided&&b.month===month).reduce((a,b)=>a+b.finalAmount,0),paid=db.payments.filter(p=>!p.voided&&p.date.startsWith(month)).reduce((a,p)=>a+p.amount,0);
+ const bd=activeStudents().map(s=>balance(s.id));$('mBilling').textContent=money(total);$('mCollected').textContent=money(paid);$('mDue').textContent=money(bd.reduce((a,b)=>a+b.due,0));$('mAdvance').textContent=money(bd.reduce((a,b)=>a+b.advance,0));
+ let no=activeStudents().filter(s=>!db.payments.some(p=>!p.voided&&p.studentId===s.id&&p.date.startsWith(month))).length;let partial=db.bills.filter(b=>!b.voided&&b.month===month&&billStatus(b)==='Partial').length;
+ $('noPay').textContent=no;$('partial').textContent=partial;
+ let sd=db.purchases.filter(p=>!p.voided).reduce((a,p)=>a+p.total-p.paid,0);$('supplierDue').textContent=money(sd);
+ $('alerts').innerHTML=(no?`<p class="bad">⚠ ${no} student(s) have made no payment this month.</p>`:'<p class="ok">✓ No-payment list is clear.</p>')+(partial?`<p class="gold">⚠ ${partial} partial bill(s) need follow-up.</p>`:'')+(sd?`<p class="bad">⚠ Supplier outstanding: ${money(sd)}</p>`:'');
+}
+
+function sharedRatio(){
+ const o=Number($('shOldCount')?.value||0),n=Number($('shNewCount')?.value||0),t=o+n;
+ return {o,n,t,op:t?o/t:0,np:t?n/t:0};
+}
+function renderSharedRatio(){
+ const r=sharedRatio();
+ if($('shRatio'))$('shRatio').innerHTML=`Total: <b>${r.t}</b> • Old Mess: <b>${(r.op*100).toFixed(2)}%</b> • New Mess: <b>${(r.np*100).toFixed(2)}%</b>`;
+}
+['shOldCount','shNewCount','shRule','shCustom'].forEach(id=>{document.addEventListener('input',e=>{if(e.target.id===id)renderSharedRatio()})});
+function sharedSplit(total,rule,custom){
+ const r=sharedRatio();let op=r.op;
+ if(rule==='50')op=.5;
+ if(rule==='custom')op=Math.max(0,Math.min(100,Number(custom||0)))/100;
+ if(rule==='meal')op=r.op; // meal mode kept ready; can later use separate meal-unit input
+ const old=Number(total||0)*op,newv=Number(total||0)-old;
+ return {old,newv};
+}
+function addSharedCost(){
+ const item=$('shItem').value.trim(),amount=Number($('shAmount').value||0),owner=$('shOwner').value,rule=$('shRule').value,custom=Number($('shCustom').value||0);
+ if(!item||amount<=0)return alert('Item aur amount required');
+ const date=$('shDate').value||today;
+ const r=sharedRatio();
+ if(owner==='common'&&r.t===0)return alert('Pehle Old Mess aur New Mess ka tiffin count dalo');
+ let old=0,newv=0;
+ if(owner==='old')old=amount;
+ else if(owner==='new')newv=amount;
+ else ({old,newv}=sharedSplit(amount,rule,custom));
+ const x={id:crypto.randomUUID(),date,item,amount,owner,rule,custom,oldShare:Number(old.toFixed(2)),newShare:Number(newv.toFixed(2)),oldCount:r.o,newCount:r.n,totalCount:r.t,note:$('shNote').value.trim(),locked:false,voided:false};
+ db.sharedCosts.push(x);audit('CREATE','Shared Cost',`${item} ${money(amount)} → Old ${money(old)}, New ${money(newv)}`);save();clearSharedCost();renderAll();alert('Common cost saved. Split automatically calculated.');
+}
+function clearSharedCost(){['shItem','shAmount','shNote'].forEach(id=>$(id).value='');$('shOwner').value='common';$('shRule').value='tiffin';$('shCustom').value=50}
+function renderShared(){
+ const date=$('shDate')?.value||today;
+ const arr=db.sharedCosts.filter(x=>x.date===date&&!x.voided);
+ const old=arr.reduce((a,x)=>a+x.oldShare,0),newv=arr.reduce((a,x)=>a+x.newShare,0),total=arr.reduce((a,x)=>a+x.amount,0);
+ if($('shOldToday'))$('shOldToday').textContent=money(old);
+ if($('shNewToday'))$('shNewToday').textContent=money(newv);
+ if($('shTotalToday'))$('shTotalToday').textContent=money(total);
+ if($('shDiffToday'))$('shDiffToday').textContent=money(total-old-newv);
+ if($('shRows'))$('shRows').innerHTML=arr.map(x=>`<tr><td><b>${esc(x.item)}</b><div class="mini">${esc(x.note||'')}</div></td><td>${money(x.amount)}</td><td>${x.owner==='common'?x.rule:x.owner}</td><td>${money(x.oldShare)}</td><td>${money(x.newShare)}</td><td class="${Math.abs(x.amount-x.oldShare-x.newShare)<.01?'ok':'bad'}">${Math.abs(x.amount-x.oldShare-x.newShare)<.01?'✓ Match':'⚠ Check'}</td></tr>`).join('')||'<tr><td colspan="6">No shared costs for this date.</td></tr>';
+ const all=db.sharedCosts.filter(x=>!x.voided);
+ const ao=all.reduce((a,x)=>a+x.oldShare,0),an=all.reduce((a,x)=>a+x.newShare,0);
+ const net=an-ao;
+ if($('settOld'))$('settOld').textContent=money(ao);
+ if($('settNew'))$('settNew').textContent=money(an);
+ if($('settNet')){$('settNet').textContent=(net>=0?'+ ':'- ')+money(Math.abs(net));$('settNet').className='v '+(net>0?'bad':'ok')}
+ if($('shAuditSummary'))$('shAuditSummary').innerHTML=`<p>All shared costs: <b>${money(ao+an)}</b></p><p>Allocation check: <b class="ok">${money((ao+an)-(ao+an))} difference</b></p><p>Transactions: <b>${all.length}</b> • Locked months: <b>${Object.keys(db.sharedLocks).length}</b></p>`;
+}
+function settlementBreakdown(){
+ const all=db.sharedCosts.filter(x=>!x.voided),ao=all.reduce((a,x)=>a+x.oldShare,0),an=all.reduce((a,x)=>a+x.newShare,0),net=an-ao;
+ $('modalTitle').textContent='1-Second Partner Settlement';
+ $('modalBody').innerHTML=`<div class="statement"><h2>Shared Kitchen Settlement</h2><p><b>Old Mess share of common costs:</b> ${money(ao)}<br><b>New Mess share of common costs:</b> ${money(an)}</p><hr><h2>${net>0?'New Mess → Old Mess':net<0?'Old Mess → New Mess':'No payment required'}</h2><h1>${money(Math.abs(net))}</h1><p>${net===0?'Both sides are exactly balanced.':`This is based only on recorded shared-kitchen costs. Every item is available below.`}</p><table><tr><th>Item</th><th>Old</th><th>New</th><th>Total</th></tr>${all.map(x=>`<tr><td>${esc(x.item)}</td><td>${money(x.oldShare)}</td><td>${money(x.newShare)}</td><td>${money(x.amount)}</td></tr>`).join('')}</table></div>`;
+ $('modal').classList.add('show');
+}
+function lockSharedMonth(){
+ const m=($('shDate')?.value||today).slice(0,7);
+ if(db.sharedLocks[m])return alert('This month is already locked.');
+ if(!confirm(`Shared Kitchen ${m} ko lock karna hai? Lock ke baad shared cost entries ko normal edit/delete nahi kiya jana chahiye.`))return;
+ db.sharedLocks[m]={lockedAt:new Date().toLocaleString('en-IN')};audit('LOCK','Shared Kitchen',m);save();renderAll();alert('Shared Kitchen month locked.');
+}
+function sharedDateChanged(){renderSharedRatio();renderShared()}
+
+function renderAll(){fillStudentSelects();renderStudents();renderShared();renderBilling();renderSuppliers();renderCash();renderStatementPreview();renderAudit();renderHome();save()}
+function backup(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='messos-backup-'+today+'.json';a.click()}
+function restore(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);save();renderAll();alert('Backup restored')}catch(err){alert('Invalid backup')}};r.readAsText(f)}
+function resetDemo(){if(!confirm('All current local data will be deleted. Continue?'))return;localStorage.removeItem(KEY);location.reload()}
+function closeModal(){$('modal').classList.remove('show')}
+document.addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+renderAll();
+</script>
+
+<script>
+function v6Go(id){
+  if(typeof showSection==='function') showSection(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
